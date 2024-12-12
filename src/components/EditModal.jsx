@@ -82,6 +82,13 @@ const CancelButton = styled(Button)`
   }
 `;
 
+const ContentHelp = styled.small`
+  display: block;
+  color: #666;
+  margin-top: 5px;
+  font-style: italic;
+`;
+
 const EditModal = ({ post, onSave, onClose }) => {
   const [formData, setFormData] = React.useState(post);
 
@@ -132,6 +139,9 @@ const EditModal = ({ post, onSave, onClose }) => {
               value={formData.content}
               onChange={handleChange}
             />
+            <ContentHelp>
+              URLs will automatically be converted to clickable links
+            </ContentHelp>
           </FormGroup>
 
           <FormGroup>

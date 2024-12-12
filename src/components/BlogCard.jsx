@@ -53,6 +53,27 @@ const Image = styled.img`
   margin-bottom: 10px;
 `;
 
+const Content = styled.div`
+  p {
+    margin-bottom: 1em;
+  }
+  
+  a {
+    color: #2196F3;
+    text-decoration: none;
+    transition: color 0.2s;
+    
+    &:hover {
+      color: #1976D2;
+      text-decoration: underline;
+    }
+    
+    &:visited {
+      color: #7E57C2;
+    }
+  }
+`;
+
 const BlogCard = ({ post, onEdit, onDelete }) => {
   return (
     <Card>
@@ -75,7 +96,14 @@ const BlogCard = ({ post, onEdit, onDelete }) => {
       <p><strong>Author:</strong> {post.author}</p>
       <p><strong>Category:</strong> {post.category}</p>
       <p><strong>Date:</strong> {new Date(post.date).toLocaleDateString()}</p>
-      <p>{post.content}</p>
+      <Content 
+        dangerouslySetInnerHTML={{ 
+          __html: post.content.replace(
+            /(https?:\/\/[^\s]+)/g, 
+            '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+          )
+        }} 
+      />
     </Card>
   );
 };
