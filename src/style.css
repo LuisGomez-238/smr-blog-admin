@@ -34,6 +34,7 @@ button:hover {
 }
 
 .post-card {
+  position: relative;
   border: 1px solid #ddd;
   padding: 15px;
   margin: 10px 0;
@@ -44,4 +45,151 @@ button:hover {
   max-width: 200px;
   height: auto;
   margin-bottom: 10px;
+}
+
+.delete-btn {
+  position: static;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+  background-color: #cc0000;
+}
+
+.delete-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.5);
+}
+
+.post-actions {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.edit-btn {
+  position: static;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background-color 0.2s;
+}
+
+.edit-btn:hover {
+  background-color: #1976D2;
+}
+
+.edit-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  width: 95%;
+  max-width: 800px;
+  max-height: 95vh;
+  overflow-y: auto;
+}
+
+.modal-content .form-group {
+  margin-bottom: 25px;
+}
+
+.modal-content h3 {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.modal-content input,
+.modal-content textarea {
+  padding: 12px;
+  font-size: 16px;
+}
+
+.modal-content .save-btn,
+.modal-content .cancel-btn {
+  padding: 12px 30px;
+  font-size: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.save-btn {
+  background-color: #4CAF50;
+}
+
+.cancel-btn {
+  background-color: #757575;
+}
+
+.save-btn:hover {
+  background-color: #45a049;
+}
+
+.cancel-btn:hover {
+  background-color: #616161;
+}
+
+/* Make the content textarea bigger */
+.modal-content textarea {
+  padding: 12px;
+  font-size: 16px;
+  min-height: 400px; /* Set minimum height */
+  resize: vertical; /* Allow vertical resizing */
+  line-height: 1.5; /* Better line spacing for readability */
+}
+
+/* Add some visual distinction to the content area */
+.modal-content textarea#edit-content {
+  background-color: #f9f9f9;
+  border: 2px solid #ddd;
+}
+
+.modal-content textarea#edit-content:focus {
+  border-color: #2196F3;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
 }

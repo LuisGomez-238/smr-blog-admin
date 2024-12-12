@@ -1,5 +1,5 @@
 {
-  "name": "blog-admin",
+  "name": "smr-blog-admin",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,12 +8,19 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "devDependencies": {
-    "vite": "^6.0.1"
-  },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.709.0",
-    "@aws-sdk/s3-request-presigner": "^3.709.0",
-    "firebase": "^11.0.2"
+    "@aws-sdk/client-s3": "^3.470.0",
+    "@aws-sdk/s3-request-presigner": "^3.470.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "firebase": "^10.7.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.8"
   }
 }
