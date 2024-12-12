@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { useS3Upload } from '../hooks/useS3Upload';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
+import imageCompression from 'browser-image-compression';
 
 const Form = styled.form`
   margin-bottom: 40px;
@@ -58,6 +59,12 @@ const ErrorMessage = styled.div`
   margin-top: 10px;
 `;
 
+const CompressionStatus = styled.div`
+  color: #2196F3;
+  font-size: 14px;
+  margin-top: 5px;
+`;
+
 const BlogForm = () => {
   const [formData, setFormData] = useState({
     title: '',
@@ -67,7 +74,29 @@ const BlogForm = () => {
     category: '',
   });
   const [imageFile, setImageFile] = useState(null);
+  const [compressionStatus, setCompressionStatus] = useState('');
   const { uploadFile, isUploading, error: uploadError } = useS3Upload();
+
+  const compressImage = async (file) => {
+    const options = {
+      maxSizeMB: 0.2, // 200KB
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+      onProgress: (progress) => {
+        setCompressionStatus(`Compressing: ${Math.round(progress)}%`);
+      }
+    };
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      console.log('Original file size:', file.size / 1024 / 1024, 'MB');
+      console.log('Compressed file size:', compressedFile.size / 1024 / 1024, 'MB');
+      return compressedFile;
+    } catch (error) {
+      console.error('Error compressing image:', error);
+      throw new Error('Failed to compress image');
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -76,18 +105,29 @@ const BlogForm = () => {
     });
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     if (e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+      try {
+        setCompressionStatus('Starting compression...');
+        const compressed = await compressImage(e.target.files[0]);
+        setImageFile(compressed);
+        setCompressionStatus('');
+      } catch (error) {
+        setCompressionStatus('Compression failed');
+        console.error('Error handling image:', error);
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (!imageFile) {
+        throw new Error('Please select an image');
+      }
+
       const imageUrl = await uploadFile(imageFile);
       
-      // Add blog post to Firestore
       await addDoc(collection(db, 'blog-posts'), {
         ...formData,
         imageUrl,
@@ -103,6 +143,7 @@ const BlogForm = () => {
         category: '',
       });
       setImageFile(null);
+      setCompressionStatus('');
       e.target.reset();
       alert('Blog post created successfully!');
     } catch (error) {
@@ -122,6 +163,9 @@ const BlogForm = () => {
           onChange={handleImageChange}
           required
         />
+        {compressionStatus && (
+          <CompressionStatus>{compressionStatus}</CompressionStatus>
+        )}
       </FormGroup>
 
       <FormGroup>
@@ -185,7 +229,10 @@ const BlogForm = () => {
 
       {uploadError && <ErrorMessage>{uploadError}</ErrorMessage>}
 
-      <SubmitButton type="submit" disabled={isUploading}>
+      <SubmitButton 
+        type="submit" 
+        disabled={isUploading || !!compressionStatus}
+      >
         {isUploading ? 'Uploading...' : 'Create Post'}
       </SubmitButton>
     </Form>
